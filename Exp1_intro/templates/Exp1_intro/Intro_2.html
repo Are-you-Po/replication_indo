@@ -1,0 +1,62 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block global_styles  %}
+<style>
+    /* body {
+        text-align: left;
+    }
+    .formfields-area {
+        text-align: center;
+    } */
+.graph-area {
+    margin: auto;
+    padding: 8px;
+    vertical-align:middle;
+    width: 500px;
+    height: auto;
+    /* border: 4px solid black; */
+    /* CSS圖片垂直對齊https://www.wibibi.com/info.php?tid=CSS_vertical-align_%E5%B1%AC%E6%80%A7 */
+    /* font-size: 40px; */
+    /* display: none */
+    /* text-align: center; */
+}
+.debug-info {
+    display: none;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div>
+    <h2>Eksperimen Utama</h2>
+    <p>Eksperimen ini memiliki 8 babak yang perlu diselesaikan. Di setiap babak, Anda harus menentukan sebuah pilihan. Setiap pilihan dilakukan pada dua jumlah dan poin pembayaran yang berbeda. Dari dua pilihan berikut, salah satu waktu pembayaran harus memiliki waktu lebih awal dibanding yang lain, dan pilihan yang berikutnya akan memiliki jumlah pembayaran yang lebih besar dibanding pilihan awal meskipun waktu yang dibutuhkan lebih banyak. Di setiap putaran, Anda akan melihat 10 opsi pilihan. Gambar di bawah ini akan memberikan contoh tentang pilihan yang dapat dipilih di setiap babak.</p> 
+</div>
+
+<div class="graph-area">
+    <p> </p>
+    <img src="{% static "picture 2.png" %} " width="500"/>
+    <p> </p>
+</div>
+
+
+<div>
+    <p>Berdasarkan nilai tukar token dan mata uang dolar Amerika, 100 token bernilai 5 dolar Amerika.</p>
+    <p>Eksperimen ini mengharuskan Anda untuk memilih antara " menerima 100 token pada waktu yang lebih awal" dan "menerima lebih dari 100 token pada waktu yang akan datang". Jumlah token yang akan diperoleh setelah partisipan memutuskan untuk menunggu akan dimulai dari 10 token, dan setelah setiap baris akan meningkat 10 token dibandingkan dengan baris sebelumnya (seperti yang ditunjukkan di bawah).</p>
+    <p>Dalam setiap putaran, komputer akan meminta Anda untuk memilih sebuah “situasi” dari mana Anda akan memilih "menerima lebih dari 100 token" dan bukannya 100 token sekarang. Pilihan anda dapat berupa bilangan bulat antara 1 dan 10. Misalnya, jika anda memilih situasi 3, itu berarti anda akan mendapatkan 130 token atau lebih di masa depan – dengan situasi anda harus bersedia menyerahkan opsi "menerima 100 token hari ini". Jika Anda ingin langsung mengambil 100 token sekarang juga, pilih situasi 10 sebagai pilihan Anda. </p>
+    <p>Ketika 10 baris opsi muncul di layar, Anda akan mendengar rekaman yang akan membacakan pilihan tersebut. Anda dapat menentukan pilihan setelah file audio berakhir. Harap baca dan dengarkan dengan saksama sebelum mengambil keputusan. </p>
+</div>
+
+{% next_button %}
+
+{% endblock %}
+
+<!-- {% block global_scripts %}
+<script>     
+    // $('.form-check-input').attr('disabled', true) 
+</script>
+{% endblock %} -->

@@ -1,0 +1,13 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<div>
+    <p>Mohon maaf, anda belum menjawab dengan benar, mohon tekan tombol ‘next’, baca lagi aturan pembayaran dan jawab kembali tes komprehensif tersebut.</p>
+</div>
+<p>{% next_button %}</p>
+
+{% endblock %}

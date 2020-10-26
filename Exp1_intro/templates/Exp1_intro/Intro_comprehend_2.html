@@ -1,0 +1,42 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Milestone 2: tes komprehensif   
+{% endblock %}
+
+{% block global_styles  %}
+<style>
+    body {
+        text-align: left;
+    }
+    .debug-info {
+        /* display: none; */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div>Bagian kedua: </div>
+
+<div>
+	<p>Di halaman sebelumnya, situasi yang anda pilih adalah {{player.switch_point}}。</p>
+	<p>Asumsikan bahwa komputer memilih babak ini untuk pembayaran dan sistem memilih situasi 5.</p>
+</div>
+
+<div>    
+	{%formfield player.comprehend%}
+</div>
+
+
+
+<div class="nextbutton-area">
+	<!-- <div>
+		註:本步驟為理解測驗，您的選擇不會影響您今天的報酬。
+	</div> -->
+	{% next_button %}
+</div>
+
+{% endblock %}
+
+

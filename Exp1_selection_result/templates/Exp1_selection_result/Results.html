@@ -1,0 +1,32 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Hasil
+{% endblock %}
+
+{% block content %}
+	<div>
+		<p>Komputer telah memilih babak {{ selected_round_number }}.</p>
+		{% if selected_get_money_later == False %}
+    		<p>Anda akan menerima {{ Constants.gained_amount_soon }} token di {{ selected_sooner_period }}.</p>
+    	{% else %}
+    		<p>Anda akan menerima {{ selected_gained_amount }} token di {{ selected_waiting_period }}. </p>
+    	{% endif %}
+	</div>
+	
+	<div>
+		{% if selected_get_money_later == False %}
+			<p>Berdasarkan milestone 3, anda harus menunggu selama {{ selected_sooner_period }} minggu untuk mendapatkan pembayaran. </p>
+    	{% else %}
+    		<p>Berdasarkan milestone 3, anda harus menunggu selama {{ selected_waiting_period }} minggu untuk mendapatkan pembayaran. </p>
+    	{% endif %}
+	</div>
+
+    <br/>
+    
+    {% next_button %}
+
+{% endblock %}
+
+

@@ -1,0 +1,220 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Babak {{ subsession.round_number }}
+{% endblock %}
+
+{% block global_styles  %}
+<style>
+    body {
+        text-align: center;
+    }
+    #speak-button {
+        font-size: 30px;
+        margin: 30px;
+    }
+    .hidden-area {
+        display: none;
+    }
+    .speech-area {
+        margin: auto;
+        padding: 8px;
+        text-align: center;
+        border: 4px solid black;
+        width: 280px;
+        height: auto;
+        font-size: 40px;
+        display: none
+    }
+
+    .template-area {  /*「範例」會使用到的文字，預設不顯示*/
+        display: none;
+    }
+    .formfields-area {
+    }
+    .nextbutton-area {  /*聽完才出現*/
+        display: none;
+    }
+    .debug-info {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <!-- <div class="template-area" style="text-align:left;">
+        <b>Milestone 2: tes komprehensif</b>
+    </div> -->
+
+    <div class="template-area" style="text-align:left;">
+        <p>
+        Sebelum memulai eksperimen ini, Milestone 2 mengharuskan anda untuk melewati tes komprehensif berdasarkan aturan yang sudah dijelaskan di atas. 
+        Anda memiliki kesempatan sebanyak dua kali untuk menjawab ujian ini. Apabila menjawab dengan tidak tepat di dalam dua kali kesempatan yang diberikan, anda tidak akan dapat berpartisipasi dalam eksperimen ini dan tidak akan mendapatkan kompensasi apapun.
+        </p>
+
+        <div>
+            <p>tes komprehensif ini terdiri dari dua bagian.</p>
+        </div>
+    </div>
+
+    <div>
+        <div class="template-area" >
+            <p>Bagian pertama：</p>
+        </div>
+
+        <div>
+            <p>Dari pertanyaan di bawah ini, anda harus memilih untuk: </p>
+            <p> menerima {{ Constants.gainedamount_sooner }} token <b>{{ player.sooner_period }}</b>. </p>
+            <p> atau </p>
+            <p> menerima lebih dari 100 token pada <b>{{ player.waiting_period }} minggu kemudian</b>.</p>
+        </div>
+
+        <button type="button" id="speak-button"> Klik tombol ini untuk mendengarkan audio </button>
+
+        <!-- <div class="speech-area"> //後來決定不採用語音合成的方式播放錄音
+            {{audio_1}}
+            {{audio_2}}
+            {{audio_3}}
+            {{audio_4}}
+            {{audio_5}}
+            {{audio_6}}
+            {{audio_7}}
+            {{audio_8}}
+            {{audio_9}}
+            {{audio_10}}
+        </div> -->
+
+
+
+        <div class="formfields-area">
+            {% formfield player.switch_point %}
+        </div>
+
+        <div class="template-area" style="text-align:left;">
+            <p>NB 1: Di dalam ujian yang sebenarnya, periode waktu belum tentu akan sama dengan periode waktu yang diberikan di dalam ujian percobaan. Sebagai contoh, periode waktu yang diberikan bisa saja seminggu kemudian atau empat minggu kemudian. Di dalam ujian percobaan ini, periode waktu {{ player.waiting_period }} minggu hanya digunakan sebagai contoh.</p>
+            <!-- <p>（註：實際的回合中，不一定會是{{ player.waiting_period }}星期，也可能是別的星期數，例如 1 星期後或 4 星期後。在此我們僅以{{ player.waiting_period }}星期為例。）</p> -->
+            <p>NB 2: Di dalam tes komprehensif ini, pilihan anda tidak akan berdampak pada pembayaran yang akan anda terima.</p>
+        </div>
+
+        <div class="nextbutton-area">
+            {% next_button %}
+        </div>
+    </div>
+    
+    <div class="hidden-area">
+        {% formfield player.sooner_period %}
+        {% formfield player.waiting_period %}
+        {% formfield player.treatment_method %}
+        <audio id="10" src="{% static 'audio10.mp3' %}"></audio>
+        <audio id="20" src="{% static 'audio20.mp3' %}"></audio>
+        <audio id="40" src="{% static 'audio40.mp3' %}"></audio>
+        <audio id="8084" src="{% static 'audio8084.mp3' %}"></audio>
+        <audio id="54" src="{% static 'audio54.mp3' %}"></audio>
+        <audio id="64" src="{% static 'audio64.mp3' %}"></audio>
+        <audio id="124" src="{% static 'audio124.mp3' %}"></audio>
+        <audio id="intro" src="{% static 'audiointro.mp3' %}"></audio>
+    </div>
+
+{% endblock %}
+
+{% block global_scripts %}
+<script>
+    var num_listen_times = 0; // 點擊 播放音檔的次數
+    var is_answered = false; // 是否點選選項了
+
+    var waiting_period = {{ player.waiting_period|json }};
+    var sooner_period = {{ player.sooner_period|json }};
+    
+    //因為sooner period會存成字串，要再把它轉成數字。
+    if (sooner_period == 'hari ini') {
+        var sooner_num = 0;
+        } 
+    else {
+        var sooner_num = 4;
+    }
+    
+    
+    $('.form-check-input').attr('disabled', true) //播放前禁止輸入
+    // 按下播放按鈕
+    
+    $('#speak-button').click(function(){ 
+        // 播放語音的次數
+        num_listen_times++;
+        $('#id_num_listen_times').val(num_listen_times)
+        // alert(sooner_num)
+
+      if (waiting_period == 3){
+            document.getElementById('intro').play();
+        }
+      else if (waiting_period == 1 && sooner_num == 0){
+            document.getElementById('10').play();
+        }
+      else if (waiting_period == 2 && sooner_num == 0){
+            document.getElementById('20').play();
+        }
+      else if (waiting_period == 4 && sooner_num == 0){
+            document.getElementById('40').play();
+        }
+      else if (waiting_period == 5 && sooner_num == 4){
+            document.getElementById('54').play();
+        }
+      else if (waiting_period == 6 && sooner_num == 4){
+            document.getElementById('64').play();
+        }
+      else if (waiting_period == 12 && sooner_num == 4){
+            document.getElementById('124').play();
+        } 
+      else {
+            document.getElementById('8084').play();
+        }
+    
+
+        onend = function () {
+            // 播放語音後選項才能點擊
+            $('.nextbutton-area').show();
+            $('.form-check-input').attr('disabled', false) //播放後才能點選，解除禁止
+            // alert('testing');
+        }
+        setTimeout(onend, 53000);
+
+        // decision_duration
+        if(num_listen_times == 1) {
+            var duration = 0
+            let interval = 0.1
+            let timer = setInterval(()=>{ // 每隔 interval 秒執行一次
+                if(num_listen_times >= 1){
+                    duration += interval; // 按下播放後開始計時
+                    $('#id_decision_duration').val(duration.toFixed(1)) // JavaScript toFixed() Method: Convert a number into a string, keeping only N decimals
+
+                }
+                if(is_answered) {
+                    clearInterval(timer);
+                }
+            }, interval * 1000);
+
+            // 按下 Next 按鈕
+            $('.otree-btn-next').click(function(){
+                radio_id_prefix = '#id_switch_point'
+                is_answered = $(radio_id_prefix + '0').is(":checked") || $(radio_id_prefix + '1').is(":checked")
+            })
+        }
+           
+    })     
+    
+
+
+
+
+    //         // 按下 Next 按鈕
+    //         $('.otree-btn-next').click(function(){
+    //             radio_id_prefix = '#id_switch_point'
+    //             is_answered = $(radio_id_prefix + '0').is(":checked") || $(radio_id_prefix + '1').is(":checked")
+    //         })
+    //     }
+    // })
+
+
+</script>
+{% endblock %}
+

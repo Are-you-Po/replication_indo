@@ -1,0 +1,154 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    測驗 2 
+{% endblock %}
+
+{% block global_styles  %}
+<style>
+    body {
+        text-align: left;
+    }
+    #speak-button {
+        font-size: 30px;
+        margin: 30px;
+    }
+    .hidden-area {
+        display: none;
+    }
+    .speech-area {
+        margin: auto;
+        padding: 8px;
+        text-align: center;
+        border: 4px solid black;
+        width: 280px;
+        height: auto;
+        font-size: 40px;
+        display: none;
+    }
+    .show-after-speech-area {
+        display: none;
+    }
+    
+    .formfields-area {
+        margin: 30px;
+        text-align: left
+    }
+    .debug-info {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div>
+	<p>請在聆聽以下錄音後，寫下您聽到的句子：</p>
+</div>
+
+<button type="button" id="speak-button"> 請點擊播放語音 </button>
+
+<div class="speech-area">
+    {{ Constants.sentence_two }} 
+</div>
+
+<div class="show-after-speech-area">
+    <div class="formfields-area">
+        {% formfield player.Ans_two %}
+    </div>  
+
+    <div class="nextbutton-area">
+        {% next_button %}
+    </div>
+</div>
+
+<div class="hidden-area">
+    {% formfield player.num_listen_times %}
+    {% formfield player.decision_duration %}
+</div>
+    
+{% endblock %}
+
+
+{% block global_scripts %}
+<script>
+    var num_listen_times = 0; // 點擊 播放音檔的次數
+    var is_answered = false; // 是否點選選項了
+    
+    // 優先使用「Google 國語」 參考："speechSynthesis 強制使用 Chrome 中的 Google 小姐中文語音" https://gist.github.com/Eotones/d67be7262856a79a77abeeccef455ebf
+    var voice;
+    function setupVoice() {
+        var voices = synth.getVoices();
+        for(let index = 0; index < voices.length; index++) {
+            var name = voices[index].name;
+            if(name.startsWith("Google Bahasa Indonesia")) {
+                voice = voices[index];
+                break;
+            }
+        }
+    }
+    // 參考："Speech synthesiser" https://mdn.github.io/web-speech-api/speak-easy-synthesis/
+    var synth = window.speechSynthesis;
+    setupVoice();
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = setupVoice;
+    }
+
+    // 按下播放按鈕
+    $('#speak-button').click(function(){
+        // 播放語音的次數
+        num_listen_times++;
+        $('#id_num_listen_times').val(num_listen_times)
+
+        $speech_area = $('.speech-area');
+        //$speech_area.show(); // 抓到文字區
+
+        var speech;
+            speech = $speech_area.text();
+     
+
+        onend = function () {
+            // 播放語音後作答區顯示
+            $('.show-after-speech-area').show();
+        }
+        speak(speech, voice, onend);
+        setTimeout(onend, 4500); // workaround: 有時候 speak 的 onend 不會進去不知道為什麼，先再加一個 timeout 確保選項會顯示
+
+        // decision_duration
+        if(num_listen_times == 1) {
+            var duration = 0
+            let interval = 0.1
+            let timer = setInterval(()=>{ // 每隔 interval 秒執行一次
+                if(num_listen_times >= 1){
+                    duration += interval; // 按下播放後開始計時
+                    $('#id_decision_duration').val(duration.toFixed(1)) // JavaScript toFixed() Method: Convert a number into a string, keeping only N decimals
+
+                }
+                if(is_answered) {
+                    clearInterval(timer);
+                }
+            }, interval * 1000);
+
+            // 按下 Next 按鈕
+        }
+    })
+
+    function speak(text, voice, onend) {
+        var utterThis = new SpeechSynthesisUtterance(text);
+        utterThis.onend = onend;
+        utterThis.onerror = function(event) {
+            console.error('SpeechSynthesisUtterance.onerror');
+        }
+        utterThis.pitch = 1;
+        utterThis.rate = 0.8;
+        if (voice) {
+            utterThis.voice = voice;
+        }
+
+        window.speechSynthesis.speak(utterThis);
+    }
+
+</script>
+
+{% endblock %}

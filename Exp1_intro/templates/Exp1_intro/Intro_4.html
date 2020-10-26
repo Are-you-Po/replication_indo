@@ -1,0 +1,17 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+<div>
+    <h2>Metode penentuan hadiah eksperimen</h2>
+    <p>Setelah Anda selesai membuat keputusan Anda di Semua {{ subsession.num_questions }} babak, komputer akan memilih secara acak satu situasi yang sudah anda pilih untuk pembayaran. Jumlah dan waktu pembayaran Anda akan bergantung pada opsi yang telah Anda pilih dalam keputusan yang dipilih secara acak ini.</p>
+    <p>Jumlah dan waktu pembayaran Anda akan bergantung pada opsi yang telah anda pilih dalam keputusan yang dipilih secara acak ini. Misalnya, anda memilih situasi 5. Ketika komputer mengeluarkan situasi 3, anda hanya akan dibayar 100 token hari ini, karena anda sudah memutuskan untuk tidak mau menerima kurang dari 150 token dalam waktu yang sudah ditentukan. </p>
+    <p>Apabila komputer mengeluarkan situasi 6, anda akan dibayar 160 token dalam 3 minggu. Karena anda memilih untuk menerima paling sedikit jumlah uang dalam situasi 5, keputusan Anda di baris keenam adalah untuk menerima 160 token dalam "x" minggu. Oleh karena itu, penghasilan Anda akan menjadi 160 Token yang dibayarkan dalam 3 minggu.</p>
+</div>
+{% next_button %}
+
+{% endblock %}
